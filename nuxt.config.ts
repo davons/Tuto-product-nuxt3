@@ -7,7 +7,10 @@ export default defineNuxtConfig({
     '@pinia/nuxt'
   ],
   pinia: {
-    autoImports: ['defineStore', ['defineStore', 'definePiniaStore']]
+    autoImports: ['defineStore', 'definePiniaStore']
+  },
+  imports: {
+    dirs: ['stores']
   },
   runtimeConfig: {
     public: {

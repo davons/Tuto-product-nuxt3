@@ -1,6 +1,6 @@
 
 export interface IProduct {
-    "@context": string;
+    "@context"?: string;
     "@id":      string;
     "@type":    string;
     id:          number;

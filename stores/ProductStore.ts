@@ -2,22 +2,19 @@ import { defineStore } from "pinia"
 import { IProduct, IProductPayload, IResponse } from "@/types"
 import axios from "axios"
 
-export const useProductStore = defineStore('product', () => {
+export const useProductStore = defineStore('ProductStore', () => {
     const products = ref<IProduct[]>()
-    const product = ref<IProduct>()
   
     //get all products
-    async function getProducts(): Promise<IResponse<IProduct[]>> {
-        const { data:products } = await axios.get('/products')
-        products.value = products['hydra:member']
-        return products
+    async function getProducts(){
+        const {data: results } = await axios.get('/products')
+        products.value = results['hydra:member']
+        return results;
     }
 
     //get a product
-    async function getProduct(id: string): Promise<IResponse<IProduct>> {
-        const { data:product } = await axios.get(`/products/${id}`)
-        product.value = product['hydra:member']
-        return product
+    async function getProduct(id: string): Promise<IProduct>{
+        return await axios.get(`/products/${id}`)
     }
 
     //add a product
@@ -37,7 +34,6 @@ export const useProductStore = defineStore('product', () => {
 
     return { 
         products, 
-        product, 
         getProducts, 
         getProduct, 
         addProduct, 
