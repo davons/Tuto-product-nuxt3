@@ -4,12 +4,14 @@ import axios from "axios"
 
 export const useProductStore = defineStore('ProductStore', () => {
     const products = ref<IProduct[]>()
+    const isLoading = ref(false)
   
     //get all products
     async function getProducts(){
+        isLoading.value = true
         const {data: results } = await axios.get('/products')
         products.value = results['hydra:member']
-        return results;
+        isLoading.value = false
     }
 
     //get a product
@@ -33,6 +35,7 @@ export const useProductStore = defineStore('ProductStore', () => {
     }
 
     return { 
+        isLoading,
         products, 
         getProducts, 
         getProduct, 
