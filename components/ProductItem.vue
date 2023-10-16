@@ -6,10 +6,10 @@
         <div class="mt-4 flex justify-between">
             <div>
                 <h3 class="text-sm text-gray-700">
-                <a href="#">
+                <NuxtLink :to="`products/${product?.id}`" class=" group-hover:text-blue-700 mb-1 text-gray-800 font-semibold">
                     <span aria-hidden="true" class="absolute inset-0"></span>
                     {{ product?.name }}
-                </a>
+                </NuxtLink>
                 </h3>
                 <p class="mt-1 text-sm text-gray-500">{{ product?.brand }}</p>
             </div>

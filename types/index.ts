@@ -1,17 +1,20 @@
 
-export interface IProduct {
-    "@context"?: string;
-    "@id":      string;
-    "@type":    string;
-    id:          number;
-    name:        string;
-    price:       number;
-    description: string;
-    rating:      number;
-    stock:       number;
-    brand:       string;
-    thumbnail:   string;
-    images:      string[];
+export interface Item {
+    "@context"?:  string;
+    "@id"?:       string;
+    "@type"?:     string;
+}
+
+export interface  IProduct extends Item{
+    id?:          number;
+    name:         string;
+    price:        number;
+    description:  string;
+    rating:       number;
+    stock:        number;
+    brand:        string;
+    thumbnail:    string;
+    images:       string[];
 }
 
 export interface IProductPayload {
@@ -29,7 +32,7 @@ export interface IResponse<T> {
 
 export interface IHydraView {
     "@id":            string;
-    type:             string;
+    "@type":          string;
     "hydra:first":    string;
     "hydra:last":     string;
     "hydra:previous": string;

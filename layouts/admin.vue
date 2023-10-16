@@ -1,0 +1,4 @@
+<template>
+    <AdminTheNavbar />
+    <slot/>
+</template>
