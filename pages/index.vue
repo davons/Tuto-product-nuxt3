@@ -12,12 +12,12 @@
 </template>
 
 <script setup lang="ts">
-  import { useProductStore } from '@/stores/ProductStore'
+import { useProductStore } from '@/stores/ProductStore'
 
-  const productStore = useProductStore()
-  onMounted(async() => {
-      await productStore.getProducts()
-  })
+const productStore = useProductStore()
+onMounted(async() => {
+    await productStore.getProducts()
+})
 </script>
 
 <style>
