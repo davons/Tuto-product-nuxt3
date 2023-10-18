@@ -1,6 +1,16 @@
 <template>
     <div class="px-4 mx-auto max-w-screen-xl text-center py-3 lg:py-3">
         <div class="relative overflow-x-auto">
+            <div class="flex items-center justify-between">
+                <h1 class="text-3xl my-4">List des produits</h1>
+                <NuxtLink
+                    to="/admin/products/create"
+                    class="px-6 py-2 bg-blue-600 text-white text-lg rounded shadow-md hover:bg-blue-700 flex items-center justify-between"
+                >
+                    <IconPlus class="mr-1 -ml-1"/>
+                    Créer un produit
+                </NuxtLink>
+            </div>
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
@@ -67,7 +77,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 definePageMeta({
   layout: "admin",
 });

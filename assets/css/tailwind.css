@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn {
+    @apply px-6 py-2 text-lg rounded shadow-md flex items-center justify-between;
+}
+
+.btn.btn-sm {
+    @apply px-4 py-2 text-sm;
+}
+
+.btn.btn-lg {
+    @apply text-lg px-8 py-4;
+}
+
+.btn-primary {
+    @apply bg-blue-600 text-white  hover:bg-blue-700;
+}
+
+.btn-danger {
+    @apply text-red-600 hover:text-white border border-red-600 hover:bg-red-600
+}
