@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { IProduct } from "@/types";
+import { IProduct } from "@/types/IProduct";
 
 defineProps({
   product: Object as PropType<IProduct>

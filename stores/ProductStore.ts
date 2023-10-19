@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { IProduct, IProductPayload, IResponse } from "@/types"
+import type { IProduct } from "@/types/IProduct"
 import axios from "axios"
 
 export const useProductStore = defineStore('ProductStore', () => {
@@ -22,12 +22,12 @@ export const useProductStore = defineStore('ProductStore', () => {
     }
 
     //add a product
-    async function addProduct(product:IProductPayload) {
+    async function addProduct(product:IProduct) {
         return await axios.post('/products', product)
     }
 
     //update a product
-    async function updateProduct(id: string, product: IProductPayload) {
+    async function updateProduct(id: string, product: IProduct) {
         return await axios.put(`/products/${id}`, product)
     }
 
