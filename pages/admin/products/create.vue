@@ -1,33 +1,33 @@
 <template>
-    <div class="px-4 mx-auto max-w-screen-xl text-center py-3 lg:py-3">
-        <AdminProductForm />
+    <div class="container mx-auto px-4 max-w-2xl text-center py-3 lg:py-3">
+        <NuxtLink to="/admin/products" class="flex items-center text-blue-500">
+            <IconArrowLeft class="mr-1 -ml-1"/>
+            Retour à la liste
+        </NuxtLink>
+        <AdminAlert :message="messageAlert" :display="displayAlert"/>
+        <AdminProductForm @create-product="create"/>
     </div>
 </template>
 
-<script setup>
-import { useForm } from 'vee-validate';
-import * as yup from 'yup';
+<script setup lang="ts">
+import { storeToRefs } from "pinia";
 
 definePageMeta({
   layout: "admin",
 });
 
-const { values, errors, defineComponentBinds , handleSubmit } = useForm({
-  validationSchema: yup.object({
-    name: yup.string().required(),
-    price: yup.number().required(),
-    description: yup.string().required()
-  }),
-});
+const productStore = useProductStore()
+const { product: item } = storeToRefs(productStore);
+const displayAlert = ref(false)
+const messageAlert = ref()
 
-const name = defineComponentBinds('name');
-const price = defineComponentBinds('price');
-const  description = defineComponentBinds('description');
-
-const onSubmit = handleSubmit(values => {
-  alert(JSON.stringify(values, null, 2));
-});
-
+async function create(product: any){
+    await productStore.create(product);
+    if (item.value) {
+        displayAlert.value = true
+        messageAlert.value = `Le ${item.value['@id']} a été créé.`
+    }
+}
 </script>
 
 <style>

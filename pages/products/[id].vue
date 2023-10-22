@@ -11,13 +11,13 @@
         </div>
       </div>
       <div class="px-6 md:py-3 lg:w-1/2">
-         <h1 class="font-bold text-3xl md:text-6xl mb-3 text-primary leading-tight">{{ product.name }}</h1>
+         <h1 class="font-bold text-3xl md:text-6xl mb-3 text-primary leading-tight">{{ product?.name }}</h1>
          <div class="mb-6">
-            <p class="font-semibold text-2xl text-slategray">£{{ product.price }}</p>
+            <p class="font-semibold text-2xl text-slategray">£{{ product?.price }}</p>
          </div>
          <div class="mb-6">
             <p class="leading-loose text-lightgray">
-                {{ product.description }}
+                {{ product?.description }}
             </p>
          </div>
          <div class="md:flex md:flex-wrap -mx-3">
@@ -62,11 +62,13 @@
 
 <script setup lang="ts">
 import { useProductStore } from '@/stores/ProductStore'
+import { storeToRefs } from 'pinia'
 
-const { id } = useRoute().params
 const uuid = computed(() => useRoute().params.id as string)
 const productStore = useProductStore()
-const {data: product} = await productStore.getProduct(uuid.value)
+const { product } = storeToRefs(productStore)
+await productStore.getProduct(uuid.value)
+
 </script>
 
 <style>

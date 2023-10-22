@@ -1,7 +1,7 @@
 <template>
     <div class="px-4 mx-auto max-w-screen-xl text-center py-3 lg:py-3">
         <div class="relative overflow-x-auto">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between mb-3">
                 <h1 class="text-3xl my-4">List des produits</h1>
                 <NuxtLink
                     to="/admin/products/create"
@@ -26,49 +26,38 @@
                       <th scope="col" class="px-6 py-3">
                           Price
                       </th>
+                      <th colspan="2" scope="col" class="px-6 py-3">
+                        Actions
+                      </th>
                   </tr>
               </thead>
               <tbody>
-                  <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <tr v-for="product in products" :key="product['@id']"  class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                       <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          Apple MacBook Pro 17"
+                          {{ product.name }}
                       </th>
                       <td class="px-6 py-4">
-                          Silver
+                          {{ product.description }}
                       </td>
                       <td class="px-6 py-4">
-                          Laptop
+                          {{ product.brand }}
                       </td>
                       <td class="px-6 py-4">
-                          $2999
+                          {{ product.price }}
                       </td>
-                  </tr>
-                  <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          Microsoft Surface Pro
-                      </th>
-                      <td class="px-6 py-4">
-                          White
-                      </td>
-                      <td class="px-6 py-4">
-                          Laptop PC
-                      </td>
-                      <td class="px-6 py-4">
-                          $1999
-                      </td>
-                  </tr>
-                  <tr class="bg-white dark:bg-gray-800">
-                      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          Magic Mouse 2
-                      </th>
-                      <td class="px-6 py-4">
-                          Black
-                      </td>
-                      <td class="px-6 py-4">
-                          Accessories
-                      </td>
-                      <td class="px-6 py-4">
-                          $99
+                      <td class="text-sm">
+                            <nuxtLink
+                                :to="{ name: 'admin-products-id', params: { id: getIdFromIri(product['@id']) } }"
+                                class="px-3 py-2 m-2 bg-blue-600 text-white text-xs rounded shadow-md hover:bg-blue-700"
+                            >
+                                Show
+                            </nuxtLink>
+                            <nuxtLink
+                                :to="{ name: 'admin-products-id-edit', params: { id: getIdFromIri(product['@id']) } }"
+                                class="px-3 py-2 bg-green-600 text-white text-xs rounded shadow-md hover:bg-green-700"
+                            >
+                                Edit
+                            </nuxtLink>
                       </td>
                   </tr>
               </tbody>
@@ -78,9 +67,16 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
+
 definePageMeta({
   layout: "admin",
 });
+
+const productStore = useProductStore()
+await productStore.getProducts()
+const { products } = storeToRefs(productStore);
+
 </script>
 
 <style>
