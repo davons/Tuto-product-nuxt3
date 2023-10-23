@@ -13,26 +13,34 @@
             </div>
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                  <tr>
-                      <th scope="col" class="px-6 py-3">
-                          Nom du produit 
-                      </th>
-                      <th scope="col" class="px-6 py-3">
-                          Description
-                      </th>
-                      <th scope="col" class="px-6 py-3">
-                          Marque
-                      </th>
-                      <th scope="col" class="px-6 py-3">
-                          Price
-                      </th>
-                      <th colspan="2" scope="col" class="px-6 py-3">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        <span class="sr-only">Image</span>
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Nom du produit 
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Description
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Marque
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Price
+                    </th>
+                    <th colspan="2" scope="col" class="px-6 py-3">
                         Actions
-                      </th>
+                    </th>
                   </tr>
               </thead>
               <tbody>
                   <tr v-for="product in products" :key="product['@id']"  class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                      <td class="w-32 p-4">
+                        <template v-if="product.image">
+                            <img :src="`http://localhost:8000${product.image?.contentUrl}`" :alt="product.name" class="w-50 h-50">
+                        </template>
+                      </td>
                       <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                           {{ product.name }}
                       </th>
@@ -76,7 +84,6 @@ definePageMeta({
 const productStore = useProductStore()
 await productStore.getProducts()
 const { products } = storeToRefs(productStore);
-console.log(products.value)
 
 </script>
 

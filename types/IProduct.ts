@@ -8,5 +8,5 @@ export interface  IProduct extends IHeader {
     stock?:       number;
     brand:        string;
     thumbnail:    string;
-    image:        Blob;
+    image:       Blob;
 }

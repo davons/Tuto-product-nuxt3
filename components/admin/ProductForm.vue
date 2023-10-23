@@ -106,11 +106,11 @@ async function onSubmit(values, { resetForm }) {
 }
 
 const schema = yup.object().shape({
-    name: yup.string().required(),
-    brand: yup.string().required(),
-    price: yup.string().required(),
-    image: yup.string().required(),
-    description: yup.string().required(),
-});
+            name: yup.string().required(),
+            brand: yup.string().required(),
+            price: yup.string().required(),
+            image: !props.isEditing? yup.string().required() :'',
+            description: yup.string().required()
+        });
 
 </script>

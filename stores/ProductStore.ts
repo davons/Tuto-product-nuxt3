@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
-import type { IProduct } from "@/types/IProduct"
 import axios from "axios"
-import { IHydraView } from "~/types/IResponse"
+import type { IHydraView, IResponse } from "@/types/IResponse"
+import type { IProduct } from "@/types/IProduct"
 
 export const useProductStore = defineStore('ProductStore', () => {
     const products = ref<IProduct[]>()
@@ -15,10 +15,10 @@ export const useProductStore = defineStore('ProductStore', () => {
     async function getProducts(){
         isLoading.value = true
         try {
-            const { data:response } = await axios.get('/products')
-            products.value = response['hydra:member']
-            totalItems.value = response['hydra:totalItems']
-            hidraView.value = response['hydra:view']
+            const { data:response } = await axios.get<IResponse<IProduct>>('/products')
+            products.value = response['hydra:member'] as IProduct[]
+            totalItems.value = response['hydra:totalItems'] as number
+            hidraView.value = response['hydra:view'] as IHydraView
             isLoading.value = false
         } catch (error) {
             isLoading.value = false
@@ -31,7 +31,7 @@ export const useProductStore = defineStore('ProductStore', () => {
     async function getProduct(id: string){
         isLoading.value = true
         try {
-            const { data:response } = await axios.get(`/products/${id}`)
+            const { data:response } = await axios.get<IProduct>(`/products/${id}`)
             product.value = response
             isLoading.value = false
         } catch (error) {
@@ -55,7 +55,7 @@ export const useProductStore = defineStore('ProductStore', () => {
                     },
                 }
             )
-  
+
             const { data:response } = await axios.post('/products', { 
                         name: payload.name, 
                         price: payload.price, 
@@ -77,8 +77,30 @@ export const useProductStore = defineStore('ProductStore', () => {
     //update 
     async function update(id: string, payload: IProduct) {
         isLoading.value = true
+        const media = ref('')
+
         try {
-            const { data: response } = await axios.put(`/products/${id}`, payload)
+            if (payload.image) {
+                const formData = new FormData();
+                formData.append("file", payload.image)
+    
+                const { data: mediaObject } = await axios.post('/media_objects', formData,  {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    }
+                )
+                media.value = mediaObject['@id']
+            }
+
+            const { data: response } = await axios.put(`/products/${id}`, {
+                name: payload.name, 
+                price: payload.price, 
+                description: payload.description, 
+                brand: payload.brand,
+                image: media.value
+            })
+            
             product.value = response
             isLoading.value = false
         } catch (error) {

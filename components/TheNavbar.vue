@@ -2,7 +2,7 @@
        <nav class="border-gray-200 px-2 mb-10 mt-3 shadow p-3">
         <div class="container mx-auto flex flex-wrap items-center justify-between">
             <NuxtLink to="/" class="flex">
-                <span class="self-center text-lg font-semibold whitespace-nowrap">E-commerce</span>
+                <span class="self-center text-lg font-semibold whitespace-nowrap">Demo Nuxt</span>
             </NuxtLink>
             <div class="flex md:order-2">
                 <div class="relative mr-3 md:mr-0 hidden md:block">
