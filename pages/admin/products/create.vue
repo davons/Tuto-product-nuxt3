@@ -17,15 +17,15 @@ definePageMeta({
 });
 
 const productStore = useProductStore()
-const { product: item } = storeToRefs(productStore);
 const displayAlert = ref(false)
 const messageAlert = ref()
 
-async function create(product: any){
-    await productStore.create(product);
-    if (item.value) {
+async function create(payload: any){
+    await productStore.create(payload);
+    const { product } = storeToRefs(productStore);
+    if (product.value) {
         displayAlert.value = true
-        messageAlert.value = `Le ${item.value['@id']} a été créé.`
+        messageAlert.value = `Le ${product.value['@id']} a été créé.`
     }
 }
 </script>

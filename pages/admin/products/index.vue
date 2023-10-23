@@ -76,6 +76,7 @@ definePageMeta({
 const productStore = useProductStore()
 await productStore.getProducts()
 const { products } = storeToRefs(productStore);
+console.log(products.value)
 
 </script>
 

@@ -1,84 +1,104 @@
 import { defineStore } from "pinia"
 import type { IProduct } from "@/types/IProduct"
 import axios from "axios"
+import { IHydraView } from "~/types/IResponse"
 
 export const useProductStore = defineStore('ProductStore', () => {
     const products = ref<IProduct[]>()
     const product  = ref<IProduct>()
-    const error = ref()
-    const isLoading = ref(false)
-    const isEdited = ref(false)
-    const isCreated = ref(false)
-    const totalItems = ref(0)
-
+    const hidraView = ref<IHydraView>()
+    const isLoading = ref<boolean>(false)
+    const totalItems = ref<number>(0)
+    const errorMessage = ref()
   
-    //get all products
+    //getProducts
     async function getProducts(){
         isLoading.value = true
-        await axios.get('/products')
-        .then(function (response) {
-            products.value = response.data['hydra:member']
-            totalItems.value = response.data['hydra:totalItems']
+        try {
+            const { data:response } = await axios.get('/products')
+            products.value = response['hydra:member']
+            totalItems.value = response['hydra:totalItems']
+            hidraView.value = response['hydra:view']
             isLoading.value = false
-        })
-        .catch(function (response) {
-            error.value = response
+        } catch (error) {
             isLoading.value = false
-        });
+            errorMessage.value = error
+            console.error("Error : ", error);
+        }
     }
 
-    //get a product
+    //getProduct
     async function getProduct(id: string){
-        await axios.get(`/products/${id}`)
-        .then(function (response) {
-            product.value = response.data
+        isLoading.value = true
+        try {
+            const { data:response } = await axios.get(`/products/${id}`)
+            product.value = response
             isLoading.value = false
-        })
-        .catch(function (response) {
-            error.value = response
+        } catch (error) {
             isLoading.value = false
-        });
+            errorMessage.value = error
+            console.error("Error : ", error);
+        }
     }
 
-    //create a product
+    //create
     async function create(payload: IProduct) {
         isLoading.value = true
-        await axios.post('/products', payload)
-        .then(function (response) {
-            product.value = response.data
+
+        try {
+            const formData = new FormData();
+            formData.append("file", payload.image)
+
+            const { data: mediaObject } = await axios.post('/media_objects', formData,  {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            )
+  
+            const { data:response } = await axios.post('/products', { 
+                        name: payload.name, 
+                        price: payload.price, 
+                        description: payload.description, 
+                        brand: payload.brand,
+                        image: mediaObject['@id']
+                    })
+
+                    product.value = response
+            
+        } catch (error) {
             isLoading.value = false
-            isCreated.value = true
-        })
-        .catch(function (response) {
-            error.value = response
-            isLoading.value = false
-        });
+            errorMessage.value = error
+            console.error("Error : ", error);
+        }
+
     }
 
-    //update a product
+    //update 
     async function update(id: string, payload: IProduct) {
-         await axios.put(`/products/${id}`, payload)
-         .then(function (response) {
-             product.value = response.data
-             isLoading.value = false
-             isEdited.value = true
-         })
-         .catch(function (response) {
-             isLoading.value = false
-             error.value = response
-         });
+        isLoading.value = true
+        try {
+            const { data: response } = await axios.put(`/products/${id}`, payload)
+            product.value = response
+            isLoading.value = false
+        } catch (error) {
+            isLoading.value = false
+            errorMessage.value = error
+            console.error("Error : ", error);
+        }
     }
 
-    //delete a product
+    //delete
     async function remove(id: string) {
-        await axios.delete(`/products/${id}`)
-        .then(function (response) {
+        isLoading.value = true
+        try {
+            await axios.delete(`/products/${id}`)
             isLoading.value = false
-        })
-        .catch(function (response) {
+        } catch (error) {
             isLoading.value = false
-            error.value = response
-        });
+            errorMessage.value = error
+            console.error("Error : ", error);
+        }
     }
 
     return { 
@@ -86,9 +106,7 @@ export const useProductStore = defineStore('ProductStore', () => {
         totalItems,
         products, 
         product,
-        error,
-        isCreated,
-        isEdited,
+        errorMessage,
         getProducts, 
         getProduct, 
         create, 

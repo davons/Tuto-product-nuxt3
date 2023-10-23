@@ -43,9 +43,9 @@
                 </div>
                 <div class="sm:col-span-2"> 
                     <BasesInputFile 
-                        name="thumbnail"
+                        name="image"
                         label="Image"
-                        id="thumbnail"
+                        id="image"
                     />   
                 </div>
                 <div class="sm:col-span-2">
@@ -96,11 +96,12 @@ if (props.item) {
     };
 }
 
-async function onSubmit(values) {
+async function onSubmit(values, { resetForm }) {
    if (props.isEditing) {
       emits('update-product', values);
    } else {
       emits('create-product', values);
+      resetForm()
    }
 }
 
@@ -108,7 +109,7 @@ const schema = yup.object().shape({
     name: yup.string().required(),
     brand: yup.string().required(),
     price: yup.string().required(),
-    thumbnail: yup.string().required(),
+    image: yup.string().required(),
     description: yup.string().required(),
 });
 

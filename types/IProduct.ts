@@ -5,8 +5,8 @@ export interface  IProduct extends IHeader {
     price:        number;
     description:  string;
     rating?:      number;
-    stock?:        number;
+    stock?:       number;
     brand:        string;
     thumbnail:    string;
-    images?:      string[];
+    image:        Blob;
 }
