@@ -1,7 +1,8 @@
 <template>
     <div
         v-if="display"
-        class="bg-green-100 rounded py-4 px-4 my-2 text-green-700 text-sm text-left"
+        class="rounded py-4 px-4 my-2 text-sm text-left"
+        :class="variant"
         role="status"
     >
     <p>{{ message }}</p>
@@ -13,6 +14,10 @@ const props = defineProps({
     display: {
         type: Boolean,
         default: false
+    },
+    variant: {
+        type: String,
+        default: ''
     },
     message: {
         type: String,

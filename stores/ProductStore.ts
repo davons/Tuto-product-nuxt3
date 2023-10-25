@@ -20,10 +20,11 @@ export const useProductStore = defineStore('ProductStore', () => {
             totalItems.value = response['hydra:totalItems'] as number
             hidraView.value = response['hydra:view'] as IHydraView
             isLoading.value = false
-        } catch (error) {
+            return response['hydra:member'] as IProduct[]
+        } catch (error: any) {
             isLoading.value = false
-            errorMessage.value = error
-            console.error("Error : ", error);
+            errorMessage.value = error.response?.data['hydra:description'] as string | undefined
+            console.error("Error : ", error.response.data['hydra:description'] as string | undefined);
         }
     }
 
@@ -34,10 +35,11 @@ export const useProductStore = defineStore('ProductStore', () => {
             const { data:response } = await axios.get<IProduct>(`/products/${id}`)
             product.value = response
             isLoading.value = false
-        } catch (error) {
+            return response as IProduct
+        } catch (error: any) {
             isLoading.value = false
-            errorMessage.value = error
-            console.error("Error : ", error);
+            errorMessage.value = error.response?.data['hydra:description'] as string | undefined
+            console.error("Error : ", error.response.data['hydra:description'] as string | undefined);
         }
     }
 
@@ -65,11 +67,12 @@ export const useProductStore = defineStore('ProductStore', () => {
                     })
 
                     product.value = response
-            
-        } catch (error) {
+
+            return response as IProduct
+        } catch (error: any) {
             isLoading.value = false
-            errorMessage.value = error
-            console.error("Error : ", error);
+            errorMessage.value = error.response?.data['hydra:description'] as string | undefined
+            console.error("Error : ", error.response.data['hydra:description'] as string | undefined);
         }
 
     }
@@ -80,6 +83,7 @@ export const useProductStore = defineStore('ProductStore', () => {
         const media = ref('')
 
         try {
+
             if (payload.image) {
                 const formData = new FormData();
                 formData.append("file", payload.image)
@@ -92,21 +96,24 @@ export const useProductStore = defineStore('ProductStore', () => {
                 )
                 media.value = mediaObject['@id']
             }
+   
 
             const { data: response } = await axios.put(`/products/${id}`, {
                 name: payload.name, 
                 price: payload.price, 
                 description: payload.description, 
                 brand: payload.brand,
-                image: media.value
+                image: media.value ? media.value : payload.image
             })
             
             product.value = response
             isLoading.value = false
-        } catch (error) {
+
+            return response as IProduct
+        } catch (error: any) {
             isLoading.value = false
-            errorMessage.value = error
-            console.error("Error : ", error);
+            errorMessage.value = error.response?.data['hydra:description'] as string | undefined
+            console.error("Error : ", error.response.data['hydra:description'] as string | undefined);
         }
     }
 

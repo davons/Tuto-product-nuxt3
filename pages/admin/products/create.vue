@@ -4,7 +4,7 @@
             <IconArrowLeft class="mr-1 -ml-1"/>
             Retour à la liste
         </NuxtLink>
-        <AdminAlert :message="messageAlert" :display="displayAlert"/>
+        <AdminAlert :message="messageAlert" :display="displayAlert" variant="bg-red-100 text-red-700"/>
         <AdminProductForm @create-product="create"/>
     </div>
 </template>
@@ -17,15 +17,23 @@ definePageMeta({
 });
 
 const productStore = useProductStore()
-const displayAlert = ref(false)
-const messageAlert = ref()
+const displayAlert = ref<boolean>(false)
+const messageAlert = ref<string>('')
+const variant = ref<string>('')
 
 async function create(payload: any){
     await productStore.create(payload);
-    const { product } = storeToRefs(productStore);
+    const { product, errorMessage } = storeToRefs(productStore);
+    
     if (product.value) {
         displayAlert.value = true
         messageAlert.value = `Le ${product.value['@id']} a été créé.`
+    }
+
+    if (errorMessage.value) {
+        displayAlert.value = true
+        messageAlert.value = errorMessage.value
+        variant.value = 'bg-red-100 text-red-700'
     }
 }
 </script>

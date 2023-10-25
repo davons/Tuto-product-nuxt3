@@ -63,6 +63,7 @@
                     type='button'
                     variant="btn-danger"
                     v-if="isEditing"
+                    @click="deleteProduct()"
                 >
                     <IconTrash class="mr-1 -ml-1"/>
                     Supprimer
@@ -86,7 +87,7 @@ const props = defineProps({
         default: false
     }
 });
-const emits = defineEmits(['create-product', 'update-product'])
+const emits = defineEmits(['create-product', 'update-product', 'delete-product'])
 
 let formValues = ref({})
 
@@ -112,5 +113,9 @@ const schema = yup.object().shape({
             image: !props.isEditing? yup.string().required() :'',
             description: yup.string().required()
         });
+
+function deleteProduct() {
+    emits('delete-product');
+}
 
 </script>
